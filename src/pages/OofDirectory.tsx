@@ -1,6 +1,9 @@
+import Page from "../components/Page";
+
 export function OofDirectory() {
   return (
-    <div>
-    </div>
+    <Page title="Oof" showBack={false}>
+      content
+    </Page>
   );
 }

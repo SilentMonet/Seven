@@ -1,4 +1,4 @@
-import { OofAPIList, OofRequest, OofResponse } from "./api";
+import type { OofAPIList, OofRequest, OofResponse } from "./api";
 // @ts-ignore
 import Secret from "./Secret";
 
