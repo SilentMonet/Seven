@@ -3,6 +3,7 @@ import Page from "../components/Page";
 import { useParams } from "react-router";
 import { OofAPI } from "../api";
 import { useSearchParam } from "../hooks";
+import { isVideo } from "../utils";
 import { StatusContainer } from "../components/StatusContainer";
 import { OofNode } from "../components/OofNode";
 
@@ -12,7 +13,7 @@ export function OofDirectory() {
     ? params["*"]
     : `/${params["*"] ?? ""}`;
   const title = decodeURIComponent(path).split("/").reverse()[0];
-  const [cid] = useSearchParam("cid", "0");
+  const [cid, setCid] = useSearchParam("cid", "0");
   const query = useInfiniteQuery({
     queryKey: ["oof", cid],
     initialPageParam: 0,
@@ -41,16 +42,28 @@ export function OofDirectory() {
       return pages.length * 200;
     },
   });
-  // const nodeList = useMemo(
-  //   () => query.data?.pages.flat() || [],
-  //   [query.data?.pages]
-  // );
+
+  const handleClick = async (item: any) => {
+    if (!item.sha) {
+      setCid(item.cid);
+      return;
+    }
+    if (isVideo(item.n)) {
+      try {
+        const url = await OofAPI.getDownloadUrl(item.pc);
+        window.open(url, '_blank');
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  };
+
   return (
-    <Page title={title || 'OOF'} showBack={false}>
+    <Page title={title || 'OOF'} showBack={cid !== "0"}>
       <StatusContainer query={query} >
         {
           ((data) => {
-            return data.pages.flat().map((item) => <OofNode meta={item} />)
+            return data.pages.flat().map((item) => <OofNode key={item.sha || item.cid} meta={item} onClick={() => handleClick(item)} />)
           })
         }
       </StatusContainer>

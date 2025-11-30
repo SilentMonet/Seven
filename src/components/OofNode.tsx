@@ -6,10 +6,9 @@ import {
   Box,
   Typography,
 } from '@mui/material';
-import FolderIcon from '@mui/icons-material/Folder';
-import DescriptionIcon from '@mui/icons-material/Description';
 import type { OofNodeMeta } from '../api/types';
 import { formatFileSize, formatDate } from '../utils';
+import { OofNodeIcon } from './OofNodeIcon';
 
 interface OofNodeProps {
   meta: OofNodeMeta;
@@ -18,13 +17,12 @@ interface OofNodeProps {
 
 export const OofNode: React.FC<OofNodeProps> = ({ meta, onClick }) => {
   const isFolder = !meta.sha;
-  const icon = isFolder ? <FolderIcon /> : <DescriptionIcon />;
 
   const formattedDate = formatDate(meta.te);
   const formattedSize = formatFileSize(meta.s);
 
   const secondaryText = (
-    <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap'}}>
+    <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
       {!isFolder && (
         <Typography variant="caption" component="span">
           {formattedSize}
@@ -45,7 +43,9 @@ export const OofNode: React.FC<OofNodeProps> = ({ meta, onClick }) => {
         },
       }}
     >
-      <ListItemIcon>{icon}</ListItemIcon>
+      <ListItemIcon>
+        <OofNodeIcon nodeMeta={meta} />
+      </ListItemIcon>
       <ListItemText
         primary={
           <Typography
@@ -61,7 +61,7 @@ export const OofNode: React.FC<OofNodeProps> = ({ meta, onClick }) => {
             {meta.n}
           </Typography>
         }
-        slotProps={{secondary: {component: 'div'}}}
+        slotProps={{ secondary: { component: 'div' } }}
         secondary={secondaryText}
       />
     </ListItem>

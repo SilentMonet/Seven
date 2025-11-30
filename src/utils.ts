@@ -65,3 +65,9 @@ export const formatDate = (timestamp: number | string | undefined): string => {
 
   return date.toLocaleDateString();
 };
+
+export const isVideo = (filename: string): boolean => {
+  const ext = filename.split('.').pop()?.toLowerCase();
+  if (!ext) return false;
+  return ['mp4', 'mkv', 'avi', 'mov', 'wmv', 'flv', 'webm', 'rmvb'].includes(ext);
+};
